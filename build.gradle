@@ -21,7 +21,12 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web")
+   compile("org.springframework.boot:spring-boot-starter-web")
+   compile 'org.springframework.boot:spring-boot-starter-data-jpa:1.1.4.RELEASE'
+   compile 'org.slf4j:slf4j-simple:1.7.7'
+   compile 'org.javassist:javassist:3.15.0-GA'
+   compile 'mysql:mysql-connector-java:5.1.31'
+   compile 'commons-dbcp:commons-dbcp:1.4'
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
 
