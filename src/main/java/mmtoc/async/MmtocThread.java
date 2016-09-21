@@ -3,9 +3,10 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import java.util.Random;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.ApplicationContext;
 
-import mmtoc.AppConfig;
+import mmtoc.config.Config;
+import mmtoc.context.AppContext;
 import mmtoc.dao.IMmtocRequestDao;
 import mmtoc.model.MmtocRequest;
 
@@ -17,6 +18,10 @@ public class MmtocThread implements Runnable {
     private final int id = ++nth;
     private final int speed;
     private MmtocRequest request;
+   
+	
+//    @Value("${mmtoc.youtube_directory}")
+//	private String youtubeDirectory;
     
 	
 
@@ -27,24 +32,23 @@ public class MmtocThread implements Runnable {
     }
     @Override
     public void run() {
-        System.out.println("Starting printer work: " + id);
+        System.out.println("Starting printer work: " + id );
         for (int i = 0; i <= 100; i += speed) {
             try {
-                MILLISECONDS.sleep(10000);
+                MILLISECONDS.sleep(300);
             } catch (InterruptedException e) {
                 // ignore
             }
             System.out.printf("worker %d, done %d%%%n", id, i);
         }
        
-        request.setStatus(1);
-   	 	 AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-	  	 ctx.register(AppConfig.class);
-	  	 ctx.refresh();
+         request.setStatus(1);
+   	 	 ApplicationContext ctx=AppContext.getApplicationContext();
 	  	 IMmtocRequestDao dao = ctx.getBean(IMmtocRequestDao.class);
+	  	
 	  	 dao.saveRequest(request);
-	  	 ctx.close();
-        System.out.println("Done PrinterJob: " + id);
+	  	 
+        System.out.println("Done PrinterJob: " + id + ctx.getBean(Config.class).getYoutube_directory());
         
     }
 }

@@ -1,9 +1,10 @@
-package mmtoc;
+package mmtoc.config;
 
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.hibernate5.HibernateTemplate;
@@ -11,6 +12,7 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import mmtoc.context.ApplicationContextProvider;
 import mmtoc.dao.IMmtocRequestDao;
 import mmtoc.dao.MmtocRequestDao;
 import mmtoc.model.MmtocRequest;
@@ -19,7 +21,15 @@ import mmtoc.model.MmtocRequest;
 
 @Configuration 
 @EnableTransactionManagement
-public class AppConfig {  
+public class AppConfig { 
+	@Value("${db.username}")
+	private String dbUserName;
+	@Value("${db.url}")
+	private String dbUrl;
+	@Value("${db.password}")
+	private String dbPassword;
+	
+	
 	@Bean  
         public IMmtocRequestDao mmtocRequestDao() {  
            return new MmtocRequestDao();  
@@ -38,14 +48,24 @@ public class AppConfig {
 	public DataSource getDataSource() {
 	    BasicDataSource dataSource = new BasicDataSource();
 	    dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-	    dataSource.setUrl("jdbc:mysql://localhost:3306/mmtoc");
-	    dataSource.setUsername("root");
-	    dataSource.setPassword("");
+	    dataSource.setUrl(dbUrl);
+	    dataSource.setUsername(dbUserName);
+	    dataSource.setPassword(dbPassword);
 	 
 	    return dataSource;
 	}
 	@Bean
 	public HibernateTransactionManager hibTransMan(){
 		return new HibernateTransactionManager(sessionFactory());
+	}
+	
+	@Bean
+	public ApplicationContextProvider applicationContextProvider(){
+		return new ApplicationContextProvider();
+	}
+	
+	@Bean
+	public Config config(){
+		return new Config();
 	}
 } 
