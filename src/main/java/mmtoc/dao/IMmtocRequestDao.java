@@ -4,5 +4,5 @@ import mmtoc.model.MmtocRequest;
 
 public interface IMmtocRequestDao
 {
-	public int saveRequest(MmtocRequest request);
+	public MmtocRequest saveRequest(MmtocRequest request);
 }

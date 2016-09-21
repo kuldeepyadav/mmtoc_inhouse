@@ -13,10 +13,10 @@ public class MmtocRequestDao implements IMmtocRequestDao {
 	
 	@Autowired
 	private HibernateTemplate  hibernateTemplate;
-	public int saveRequest(MmtocRequest request) {
+	public MmtocRequest saveRequest(MmtocRequest request) {
 		// TODO Auto-generated method stub
 		hibernateTemplate.saveOrUpdate(request);;
-		return request.getId();
+		return request;
 		
 	}
 } 
