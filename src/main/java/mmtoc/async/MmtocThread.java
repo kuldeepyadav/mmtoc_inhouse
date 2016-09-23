@@ -1,14 +1,15 @@
 package mmtoc.async;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.springframework.context.ApplicationContext;
 
@@ -16,6 +17,7 @@ import mmtoc.config.Config;
 import mmtoc.context.AppContext;
 import mmtoc.dao.IMmtocRequestDao;
 import mmtoc.model.MmtocRequest;
+import mmtoc.utils.Utils;
 
 
 public class MmtocThread implements Runnable {
@@ -84,11 +86,41 @@ public class MmtocThread implements Runnable {
     		commands.add(mConfig.getYoutube_command());
     		commands.add(mConfig.getYoutube_command2());
     		commands.add(mRequest.getVideo_id());
+    		if(mConfig.getUse_proxy()){
+    			commands.add("--proxy "+ mConfig.getProxy_string()+":"+mConfig.getProxy_port());
+    		}
+    		
     		executeCommand(commands,null,COMMAND_TYPE_YOUTUBEDL);
+    	}
+    	else{
+    		downloadOtherVideo();	
     	}
 		
 		
 	}
+    
+    void downloadOtherVideo() throws IOException
+    {
+    	String videoUrlString=mRequest.getUrl();
+    	URL videoUrl;
+	
+			videoUrl = new URL(videoUrlString);
+		
+    	String ext = videoUrlString.substring(videoUrlString.lastIndexOf('.') + 1);
+    	File videoTarget=new File(mConfig.getOthers_directory()+"/"+mRequest.getVideo_id()+"."+ext);
+    	
+    	System.out.println(mConfig.getProxy_string()+":"+mConfig.getProxy_port());
+    	if(mConfig.getUse_proxy()){
+    		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
+					mConfig.getProxy_string(), mConfig.getProxy_port()));
+    		Utils.downloadUsingProxy(proxy, videoUrl, videoTarget);
+    	}
+    	else{
+    	org.apache.commons.io.FileUtils.copyURLToFile(videoUrl,videoTarget );
+    	}
+    	
+		
+    }
 
 
 
