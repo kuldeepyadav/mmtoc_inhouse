@@ -84,12 +84,22 @@ public class MmtocThread implements Runnable {
     	if(mRequest.getType().equalsIgnoreCase("youtube")){
     		List<String> commands=new ArrayList<>();
     		commands.add(mConfig.getYoutube_command());
+    		if(mConfig.getUse_proxy()){
+    			commands.add("--proxy");
+    			commands.add("\""+ mConfig.getProxy_string()+":"+mConfig.getProxy_port()+"\"");
+    		}
     		commands.add(mConfig.getYoutube_command2());
     		commands.add(mRequest.getVideo_id());
-    		if(mConfig.getUse_proxy()){
-    			commands.add("--proxy "+ mConfig.getProxy_string()+":"+mConfig.getProxy_port());
-    		}
     		
+    	
+    		StringBuilder sb = new StringBuilder();
+    		for (String s : commands)
+    		{
+    		    sb.append(s);
+    		    sb.append("\t");
+    		}
+
+    		System.out.println(sb.toString());
     		executeCommand(commands,null,COMMAND_TYPE_YOUTUBEDL);
     	}
     	else{
