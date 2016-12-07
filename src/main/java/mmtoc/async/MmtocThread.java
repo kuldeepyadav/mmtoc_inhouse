@@ -149,6 +149,8 @@ public class MmtocThread implements Runnable {
     		commands.add(mConfig.getYoutube_command4());
     		commands.add("--sub-lang");
     		commands.add("en");
+    		commands.add("--convert-subs");
+    		commands.add("srt");
     		commands.add(mConfig.getYoutube_command7());
     		commands.add(mRequest.getVideo_id());
     		
