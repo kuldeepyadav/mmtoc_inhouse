@@ -51,6 +51,8 @@ public class AppConfig {
 	    dataSource.setUrl(dbUrl);
 	    dataSource.setUsername(dbUserName);
 	    dataSource.setPassword(dbPassword);
+	    dataSource.setTestOnBorrow(true);
+	    dataSource.setValidationQuery("SELECT 1");
 	 
 	    return dataSource;
 	}
