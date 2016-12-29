@@ -8,12 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import mmtoc.async.MmtocThread;
 import mmtoc.dao.IMmtocRequestDao;
 import mmtoc.model.MmtocRequest;
 import mmtoc.model.Response;
+import mmtoc.model.ResponseTags;
+import mmtoc.visualtag.VisualTagsHelper;
 
 @RestController
 public class MmtocController {
@@ -44,5 +48,16 @@ public class MmtocController {
     		ex.printStackTrace();
     		return new Response(-1,"Error:"+ex.getMessage());
     	}
+    }
+    
+    
+    
+    
+    @RequestMapping(value="/getVisualTags",method=RequestMethod.GET)
+    public  ResponseTags getVisualTags(@RequestParam(value="videoId", required=true) String videoId) {
+    	
+    	
+    	return VisualTagsHelper.getVideoTags(videoId);
+        
     }
 }
